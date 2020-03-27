@@ -3,11 +3,12 @@ import {
     useBase,
     useRecords,
     useGlobalConfig,
+    useSettingsButton,
     ViewPickerSynced,
     Box,
     FormField,
 } from '@airtable/blocks/ui';
-import React from 'react';
+import React, {useState} from 'react';
 
 // This block uses chart.js and the react-chartjs-2 packages.
 // Install them by running this in the terminal:
@@ -21,6 +22,9 @@ const GlobalConfigKeys = {
 function SimpleChartBlock() {
     const base = useBase();
     const globalConfig = useGlobalConfig();
+    const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+
+    useSettingsButton(() => setIsSettingsVisible(!isSettingsVisible));
 
     const table = base.getTableByName("Project Budgets");
 
@@ -41,7 +45,9 @@ function SimpleChartBlock() {
             display="flex"
             flexDirection="column"
         >
-            <Settings table={table} />
+            {isSettingsVisible && (
+                <Settings table={table} />
+            )}
             {data && (
                 <Box position="relative" flex="auto" padding={3}>
                     <Bar
