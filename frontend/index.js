@@ -3,9 +3,7 @@ import {
     useBase,
     useRecords,
     useGlobalConfig,
-    TablePickerSynced,
     ViewPickerSynced,
-    FieldPickerSynced,
     Box,
     FormField,
 } from '@airtable/blocks/ui';
@@ -17,9 +15,7 @@ import React from 'react';
 import {Bar} from 'react-chartjs-2';
 
 const GlobalConfigKeys = {
-    TABLE_ID: 'tableId',
     VIEW_ID: 'viewId',
-    X_FIELD_ID: 'xFieldId',
 };
 
 function SimpleChartBlock() {
