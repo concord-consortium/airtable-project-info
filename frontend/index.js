@@ -1,14 +1,16 @@
 import {
     initializeBlock,
+    expandRecord,
     useBase,
     useRecords,
     useGlobalConfig,
     useSettingsButton,
     ViewPickerSynced,
     Box,
+    Select,
     FormField,
 } from '@airtable/blocks/ui';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 // This block uses chart.js and the react-chartjs-2 packages.
 // Install them by running this in the terminal:
@@ -23,17 +25,47 @@ function SimpleChartBlock() {
     const base = useBase();
     const globalConfig = useGlobalConfig();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+    const [project, setProject] = useState(null);
 
     useSettingsButton(() => setIsSettingsVisible(!isSettingsVisible));
 
     const table = base.getTableByName("Project Budgets");
 
     const viewId = globalConfig.get(GlobalConfigKeys.VIEW_ID);
-    const view = table ? table.getViewByIdIfExists(viewId) : null;
+    const view = table.getViewByIdIfExists(viewId);
 
-    const records = useRecords(view);
+    const allRecords = useRecords(view);
 
+    const options = [{ value: null, label: 'All Projects'}];
+    if(allRecords) {
+      for(let record of allRecords){
+        options.push({ value: record.id, label: record.primaryCellValueAsString})
+      }
+    }
+
+    // If there is no view set, then show the settings automatically
+    useEffect(() => {
+      if (!view) {
+        setIsSettingsVisible(true);
+      }
+    }, [view])
+
+    let records = allRecords;
+    if(project && allRecords) {
+      records = [allRecords.find(record => record.id === project)];
+    }
     const data = records ? getChartData({records}) : null;
+
+    // It would be more efficient to wrap this in a useCallback
+    function handleBarClick(elements) {
+      if(elements.length == 0) {
+        return;
+      }
+      const index = elements[0]._index;
+      if(records) {
+        expandRecord(records[index]);
+      }
+    }
 
     return (
         <Box
@@ -48,6 +80,14 @@ function SimpleChartBlock() {
             {isSettingsVisible && (
                 <Settings table={table} />
             )}
+            <Box width="33.33%" padding={1} marginBottom={0}>
+                <Select
+                  options={options}
+                  value={project}
+                  onChange={newProject => setProject(newProject)}
+                />
+            </Box>
+
             {data && (
                 <Box position="relative" flex="auto" padding={3}>
                     <Bar
@@ -69,6 +109,7 @@ function SimpleChartBlock() {
                                 display: true,
                             },
                         }}
+                        onElementsClick={handleBarClick}
                     />
                 </Box>
             )}
@@ -78,31 +119,41 @@ function SimpleChartBlock() {
 
 function getChartData({records}) {
     const labels = records.map(record => record.primaryCellValueAsString);
-    const points = records.map(record => 10);
 
     const data = {
         labels,
         datasets: [
             {
-                label: 'FY Spent (Reconciled)',
+                label: 'Spent (BA)',
                 backgroundColor: 'rgb(138, 177, 255)',
                 data: records.map(record => record.getCellValue('Sticky Spent (BA)')),
             },
             {
-                label: 'FY Planned and Unreconciled Spent',
+                label: 'Unreconciled Spent',
                 backgroundColor: 'rgb(142, 219, 250)',
-                data: records.map(record => record.getCellValue('Unreconciled Planned Stickies')),
+                data: records.map(record => record.getCellValue('Unreconciled Past Stickies')),
             },
             {
-                label: 'FY Remaining',
+                label: 'Planned',
+                backgroundColor: 'rgb(234, 109, 47)',
+                data: records.map(record => record.getCellValue('Future Stickies')),
+            },
+            {
+                label: 'Estimated Remaining',
                 backgroundColor: 'rgb(163, 239, 137)',
                 data: records.map(record => record.getCellValue('Estimated Remaining')),
             },
             {
-                label: 'FY Total',
+                label: 'Spent (BA) 2',
+                backgroundColor: 'rgb(138, 177, 255)',
+                stack: 'total',
+                data: records.map(record => record.getCellValue('Sticky Spent (BA)')),
+            },
+            {
+                label: 'Remaining (BA)',
                 backgroundColor: 'rgb(255, 100, 100)',
                 stack: 'total',
-                data: records.map(record => record.getCellValue('FY Budget')),
+                data: records.map(record => record.getCellValue('Sticky Remaining (BA)')),
             },
          ],
     };
