@@ -6,12 +6,12 @@ import {
     useSettingsButton,
     ViewPickerSynced,
     Box,
-    Select,
     SelectSynced,
     FormField,
 } from '@airtable/blocks/ui';
 import React, {useState, useEffect} from 'react';
 import ProjectBudgetGraph from './project-budget-graph';
+import ProjectDashboard from './project-dashboard';
 
 const GlobalConfigKeys = {
     VIEW_ID: 'viewId',
@@ -57,42 +57,15 @@ function ProjectInfoBlock() {
             <ProjectDashboard records={allRecords}/>
           )}
           {mode === "budget-graph" && (
-            <ProjectBudgetGraph records={allRecords}/>
+            <Box position="relative" flex="auto" padding={3}>
+              <ProjectBudgetGraph records={allRecords}/>
+            </Box>
           )}
       </Box>
   );
 }
 
-function ProjectDashboard({records}) {
-  const [project, setProject] = useState(null);
 
-  let options = [{value: null, label: "Choose a Project"}];
-  if(records) {
-    for(let record of records){
-      options.push({value: record.id, label: record.primaryCellValueAsString});
-    }
-  }
-
-  let projects = records;
-  if(project && records) {
-    projects = [records.find(record => record.id === project)];
-  }
-
-  return (
-    <Box>
-      <Box width="33.33%" padding={1} marginBottom={0}>
-          <Select
-            options={options}
-            value={project}
-            onChange={newProject => setProject(newProject)}
-          />
-      </Box>
-      {project && (
-        <ProjectBudgetGraph records={projects}/>
-      )}
-    </Box>
-  );
-}
 
 function Settings({table}) {
     const modeOptions = [

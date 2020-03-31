@@ -1,6 +1,5 @@
 import {
     expandRecord,
-    Box,
 } from '@airtable/blocks/ui';
 import React from 'react';
 
@@ -24,29 +23,27 @@ export default function ProjectBudgetGraph({records}) {
     }
 
     return data && (
-        <Box position="relative" flex="auto" padding={3}>
-            <Bar
-                data={data}
-                options={{
-                    maintainAspectRatio: false,
-                    scales: {
-                        xAxes: [{
-                            stacked: true,
-                        }],
-                        yAxes: [{
-                            stacked: true,
-                            ticks: {
-                                beginAtZero: true,
-                            },
-                        }],
-                    },
-                    legend: {
-                        display: true,
-                    },
-                }}
-                onElementsClick={handleBarClick}
-            />
-        </Box>
+          <Bar
+              data={data}
+              options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                      xAxes: [{
+                          stacked: true,
+                      }],
+                      yAxes: [{
+                          stacked: true,
+                          ticks: {
+                              beginAtZero: true,
+                          },
+                      }],
+                  },
+                  legend: {
+                      display: true,
+                  },
+              }}
+              onElementsClick={handleBarClick}
+          />
     );
 }
 
