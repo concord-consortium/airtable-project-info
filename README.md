@@ -1,24 +1,29 @@
-# Simple chart block
+# Project info block
 
-This example blocks shows a bar chart of data from a table.
+This is multi purpose block.
 
-The code shows:
+It has a mode setting to show:
+- a bar chart of project budgets
+- a dashboard focused on a single project
 
--   How to use the Chart.js external library.
+The bar chart is custom tailored to stack various fields from the Project Budgets
+table. Each Project (a record in the table) is a set of bars.
 
--   How to store block-related data using `globalConfig` and `Synced` UI components.
+The dashboard uses react-grid-layout and currently just includes the bar chart
+from above filtered to only show the selected project.
 
-## How to run this block
+## How to develop this block
 
-1. Create a new base using the
-   [Sales CRM template](https://airtable.com/templates/sales-and-customers/expvjTzYAZareV1pt/sales-crm).
+1. Make a copy of the Portfolio Base
 
-2. Create a new block in your new base (see
+2. Use an exiting instance of this block in your copy or
    [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
-   selecting "Simple chart" as your template.
+   You don't need to select a template when creating a new block doing this.
 
-3. From the root of your new block, run `block run`.
+3. Check out this repository locally
 
-## See the block running
+4. Install the Airtable block command.  The tutorial above provides guidance,
+   and the UI in Airtable provides guidance when making the new block.
 
-![Block updating chart as the user changes data](media/block.gif)
+5. If this is the first time you need to change the chrome setting to allow localhost
+   unsecure https access. The Airtable UI provides guidance on this.
