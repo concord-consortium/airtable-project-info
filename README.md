@@ -7,7 +7,7 @@ It has a mode setting to show:
 - a dashboard focused on a single project
 
 The bar chart is custom tailored to stack various fields from the Project Budgets
-table. Each Project (a record in the table) is a set of bars.
+table. Each Project (a record in the table) is represented by a set of bars.
 
 The dashboard uses react-grid-layout and currently just includes the bar chart
 from above filtered to only show the selected project.
@@ -16,7 +16,7 @@ from above filtered to only show the selected project.
 
 1. Make a copy of the Portfolio Base
 
-2. Use an exiting instance of this block in your copy or
+2. Use an existing instance of this block in your copy or
    [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
    You don't need to select a template when creating a new block doing this.
 
