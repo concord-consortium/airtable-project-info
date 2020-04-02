@@ -33,6 +33,10 @@ function ProjectInfoBlock() {
 
   const allRecords = useRecords(view);
 
+  // TODO allow author to filter this with a view instead of showing the
+  // whole table
+  const goalsTable = base.getTableByName("Sprint Goals");
+
   // If there is no view set, then show the settings automatically
   useEffect(() => {
     if (!view) {
@@ -54,7 +58,7 @@ function ProjectInfoBlock() {
               <Settings table={table} />
           )}
           {mode === "dashboard" && (
-            <ProjectDashboard records={allRecords}/>
+            <ProjectDashboard projects={allRecords} goalsTableOrView={goalsTable}/>
           )}
           {mode === "budget-graph" && (
             <Box position="relative" flex="auto" padding={3}>

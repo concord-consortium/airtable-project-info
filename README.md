@@ -9,8 +9,10 @@ It has a mode setting to show:
 The bar chart is custom tailored to stack various fields from the Project Budgets
 table. Each Project (a record in the table) is represented by a set of bars.
 
-The dashboard uses react-grid-layout and currently just includes the bar chart
-from above filtered to only show the selected project.
+The dashboard uses react-grid-layout and filters its components based on a
+select project. It currently has the chart from above and a record list.
+The selected project is not saved because we want each user to select their own
+project without affecting the other users.
 
 ## How to develop this block
 
